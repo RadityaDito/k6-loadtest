@@ -20,7 +20,7 @@ let responseSize = new Trend('response_size'); // NEW: to track size in bytes
 
 // Choose your load test profile by setting MAX_VUS environment variable
 // Example: K6_MAX_VUS=500 k6 run grpc-memory.js
-const MAX_VUS = '1000';
+const MAX_VUS = '100';
 
 let testStages;
 switch(MAX_VUS) {
@@ -71,7 +71,7 @@ let isConnected = false;
 export default () => {
   // Connect once per VU
   if (!isConnected) {
-    client.connect('47.128.227.176:6000', { plaintext: true });
+    client.connect('47.129.237.24:6000', { plaintext: true });
     // client.connect('192.168.100.40:6000', { plaintext: true });
     // client.connect('localhost:6000', { plaintext: true });
     isConnected = true;
