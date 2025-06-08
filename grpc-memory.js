@@ -29,7 +29,8 @@ switch(MAX_VUS) {
       { duration: '5s', target: 25 },   // Gentle start
       { duration: '10s', target: 50 },  // Ramp to 50
       { duration: '20s', target: 100 }, // Ramp to 100
-      { duration: '280s', target: 100 }, // Sustained load
+      // { duration: '280s', target: 100 }, // Sustained load
+      { duration: '40s', target: 100 }, // Sustained load
       { duration: '5s', target: 0 },    // Ramp down
     ];
     break;
@@ -48,7 +49,8 @@ switch(MAX_VUS) {
       { duration: '10s', target: 100 },  // Slower ramp to 100
       { duration: '20s', target: 500 },  // Slower ramp to 500  
       { duration: '20s', target: 1000 }, // Slower ramp to 1000
-      { duration: '280s', target: 1000 }, // Longer sustained load
+      // { duration: '280s', target: 1000 }, // Longer sustained load
+      { duration: '40s', target: 1000 }, // Longer sustained load
       { duration: '10s', target: 0 },    // Graceful ramp down
     ];
     break;
