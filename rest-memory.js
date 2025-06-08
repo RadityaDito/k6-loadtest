@@ -57,7 +57,7 @@ export let options = {
 export default function () {
   // const url = 'http://47.128.144.242:4000/api/v1/memory/products/all';
   // const url = 'http://192.168.0.102:4000/api/v1/memory/products/all';
-  const url = 'http://54.251.128.102:3000/api/data';
+  const url = 'http://13.250.8.78:3000/api/data';
 
   // Start timing
   const start = new Date().getTime();
