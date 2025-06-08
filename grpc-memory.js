@@ -66,17 +66,16 @@ export let options = {
 
 
 
-let isConnected = false;
+// Use this corrected version
+const connectedVUs = {};
 
 export default () => {
-  // Connect once per VU
-  if (!isConnected) {
+   const vuId = __VU;
+  
+  if (!connectedVUs[vuId]) {
     client.connect('47.129.237.24:6000', { plaintext: true });
-    // client.connect('192.168.100.40:6000', { plaintext: true });
-    // client.connect('localhost:6000', { plaintext: true });
-    isConnected = true;
+    connectedVUs[vuId] = true;
   }
-
   const data = {};
   let start = new Date().getTime();
 
