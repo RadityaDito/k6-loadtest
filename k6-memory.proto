@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package memory.v1;
+
+import "google/protobuf/empty.proto";
+
+option go_package = "pkg/grpc/memory";
+
+// MemoryProductService provides methods for in-memory product operations
+service MemoryProductService {
+  // Get all products without pagination
+  rpc GetAllProducts(google.protobuf.Empty) returns (ListProductsResponse);
+}
+
+// Product represents a product entity
+message Product {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  double price = 4;
+  string created_at = 5;
+  string updated_at = 6;
+}
+
+// ListProductsResponse contains a list of products with pagination info
+message ListProductsResponse {
+  repeated Product products = 1;
+  int32 page = 2;
+  int32 page_size = 3;
+  int32 total_count = 4;
+}
