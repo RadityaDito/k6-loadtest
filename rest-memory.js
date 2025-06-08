@@ -11,7 +11,7 @@ let responseSize = new Trend('response_size');
 
 // Choose your load test profile by setting MAX_VUS environment variable
 // Example: K6_MAX_VUS=500 k6 run rest-memory.js
-const MAX_VUS = '100';
+const MAX_VUS = __ENV.MAX_VUS || '100';
 
 let testStages;
 switch(MAX_VUS) {
