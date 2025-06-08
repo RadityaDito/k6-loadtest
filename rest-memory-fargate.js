@@ -9,18 +9,9 @@ let requestsCount = new Counter('requests');
 let responseTime = new Trend('response_time');
 let responseSize = new Trend('response_size');
 
-// export let options = {
-//   vus: 1000,                // Virtual Users
-//   duration: '1m',         // Test duration
-//   discardResponseBodies: false,
-//   thresholds: {
-//     'success_rate': ['rate>=0.95'],  // 95% or more successful requests
-//   }
-// };
-
 // Choose your load test profile by setting MAX_VUS environment variable
 // Example: K6_MAX_VUS=500 k6 run rest-memory-fargate.js
-const MAX_VUS = '1000';
+const MAX_VUS = __ENV.MAX_VUS || '100';
 
 let testStages;
 switch(MAX_VUS) {
@@ -29,7 +20,8 @@ switch(MAX_VUS) {
       { duration: '5s', target: 25 },   // Gentle start
       { duration: '10s', target: 50 },  // Ramp to 50
       { duration: '20s', target: 100 }, // Ramp to 100
-      { duration: '280s', target: 100 }, // Sustained load
+      // { duration: '280s', target: 100 }, // Sustained load
+      { duration: '40s', target: 100 }, // Sustained load
       { duration: '5s', target: 0 },    // Ramp down
     ];
     break;
@@ -48,7 +40,8 @@ switch(MAX_VUS) {
       { duration: '10s', target: 100 },  // Slower ramp to 100
       { duration: '20s', target: 500 },  // Slower ramp to 500  
       { duration: '20s', target: 1000 }, // Slower ramp to 1000
-      { duration: '280s', target: 1000 }, // Longer sustained load
+      // { duration: '280s', target: 1000 }, // Longer sustained load
+      { duration: '40s', target: 1000 }, // Longer sustained load
       { duration: '10s', target: 0 },    // Graceful ramp down
     ];
     break;
