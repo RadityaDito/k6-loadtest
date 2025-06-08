@@ -62,14 +62,7 @@ export let options = {
   }
 };
 
-// export let options = {
-//   vus: 10,                // Virtual Users
-//   duration: '1m',         // Test duration
-//   discardResponseBodies: false,
-//   thresholds: {
-//     'success_rate': ['rate>=0.95'],  // 95% or more successful requests
-//   }
-// };
+
 
 let isConnected = false;
 
