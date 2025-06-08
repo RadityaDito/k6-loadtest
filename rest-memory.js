@@ -62,14 +62,6 @@ export let options = {
   }
 };
 
-// export let options = {
-//   vus: 10,                // Virtual Users
-//   duration: '1m',         // Test duration
-//   discardResponseBodies: false,
-//   thresholds: {
-//     'success_rate': ['rate>=0.95'],  // 95% or more successful requests
-//   }
-// };
 
 export default function () {
   // const url = 'http://47.128.144.242:4000/api/v1/memory/products/all';
