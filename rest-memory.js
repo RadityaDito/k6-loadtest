@@ -26,11 +26,11 @@ switch(MAX_VUS) {
     break;
   case '500':
     testStages = [
-      // { duration: '10s', target: 50 },   // Gentle start
-      // { duration: '15s', target: 250 },  // Ramp to 250
+      { duration: '10s', target: 50 },   // Gentle start
+      { duration: '15s', target: 250 },  // Ramp to 250
       { duration: '20s', target: 500 },  // Ramp to 500
       { duration: '40s', target: 500 },  // Sustained load
-      // { duration: '10s', target: 0 },    // Ramp down
+      { duration: '10s', target: 0 },    // Ramp down
     ];
     break;
   case '1000':
