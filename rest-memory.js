@@ -9,15 +9,6 @@ let requestsCount = new Counter('requests');
 let responseTime = new Trend('response_time');
 let responseSize = new Trend('response_size');
 
-// export let options = {
-//   vus: 1000,                // Virtual Users
-//   duration: '1m',         // Test duration
-//   discardResponseBodies: false,
-//   thresholds: {
-//     'success_rate': ['rate>=0.95'],  // 95% or more successful requests
-//   }
-// };
-
 // Choose your load test profile by setting MAX_VUS environment variable
 // Example: K6_MAX_VUS=500 k6 run rest-memory.js
 const MAX_VUS = '100';
