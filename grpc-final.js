@@ -69,7 +69,7 @@ export default () => {
   const vuId = __VU;
   
   if (!connectedVUs[vuId]) {
-    client.connect('localhost:6000', { plaintext: true });
+    client.connect('54.179.153.42:6000', { plaintext: true });
     connectedVUs[vuId] = true;
   }
   

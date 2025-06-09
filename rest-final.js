@@ -54,7 +54,7 @@ export let options = {
 };
 
 export default function () {
-  const url = 'http://localhost:4000/api/products';
+  const url = 'http://54.179.153.42:4000/api/products';
 
   // Start timing
   const start = new Date().getTime();
