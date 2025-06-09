@@ -74,7 +74,8 @@ export default () => {
   
   if (!connectedVUs[vuId]) {
     // client.connect('47.129.237.24:6000', { plaintext: true });
-    client.connect('10.0.1.185:6000', { plaintext: true });
+    // client.connect('10.0.1.185:6000', { plaintext: true });
+    client.connect('54.179.153.42:6000', { plaintext: true });
     connectedVUs[vuId] = true;
   }
   const data = {};

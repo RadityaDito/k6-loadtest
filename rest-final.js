@@ -10,7 +10,7 @@ let responseTime = new Trend('response_time');
 let responseSize = new Trend('response_size');
 
 // Choose your load test profile by setting MAX_VUS environment variable
-// Example: K6_MAX_VUS=500 k6 run rest-memory.js
+// Example: K6_MAX_VUS=500 k6 run rest-final.js
 const MAX_VUS = __ENV.MAX_VUS || '100';
 
 let testStages;
@@ -20,7 +20,6 @@ switch(MAX_VUS) {
       { duration: '5s', target: 25 },   // Gentle start
       { duration: '10s', target: 50 },  // Ramp to 50
       { duration: '20s', target: 100 }, // Ramp to 100
-      // { duration: '280s', target: 100 }, // Sustained load
       { duration: '40s', target: 100 }, // Sustained load
       { duration: '5s', target: 0 },    // Ramp down
     ];
@@ -40,7 +39,6 @@ switch(MAX_VUS) {
       { duration: '10s', target: 100 },  // Slower ramp to 100
       { duration: '20s', target: 500 },  // Slower ramp to 500  
       { duration: '20s', target: 1000 }, // Slower ramp to 1000
-      // { duration: '280s', target: 1000 }, // Longer sustained load
       { duration: '40s', target: 1000 }, // Longer sustained load
       { duration: '10s', target: 0 },    // Graceful ramp down
     ];
@@ -55,13 +53,8 @@ export let options = {
   }
 };
 
-
 export default function () {
-  // const url = 'http://47.128.144.242:4000/api/v1/memory/products/all';
-  // const url = 'http://192.168.0.102:4000/api/v1/memory/products/all';
-  // const url = 'http://47.129.237.24:4000/api/v1/memory/products/all';
-  // const url = 'http://10.0.1.185:4000/api/v1/memory/products/all';
-  const url = 'http://54.179.153.42:4000/api/v1/memory/products/all';
+  const url = 'http://localhost:4000/api/products';
 
   // Start timing
   const start = new Date().getTime();

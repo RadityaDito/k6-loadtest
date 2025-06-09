@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package product;
+option go_package = "./product";
+
+service ProductService {
+  rpc GetAll(Empty) returns (ProductList) {}
+  rpc AddProduct(AddRequest) returns (Empty) {}
+  rpc DeleteAll(Empty) returns (Empty) {}
+}
+
+message Empty {}
+
+message Product {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  double price = 4;
+  string category = 5;
+}
+
+message AddRequest {
+  int32 count = 1;
+}
+
+message ProductList {
+  repeated Product products = 1;
+}

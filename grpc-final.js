@@ -1,6 +1,15 @@
-import http from 'k6/http';
+import grpc from 'k6/net/grpc';
 import { check, sleep } from 'k6';
 import { Trend, Rate, Counter } from 'k6/metrics';
+
+// Create a gRPC client
+const client = new grpc.Client({
+  timeout: '10s',
+  plaintext: true,
+  reflect: false
+});
+
+client.load(['./'], 'product.proto');
 
 // Custom Metrics
 let successRate = new Rate('success_rate');
@@ -10,7 +19,7 @@ let responseTime = new Trend('response_time');
 let responseSize = new Trend('response_size');
 
 // Choose your load test profile by setting MAX_VUS environment variable
-// Example: K6_MAX_VUS=500 k6 run rest-memory.js
+// Example: K6_MAX_VUS=500 k6 run grpc-final.js
 const MAX_VUS = __ENV.MAX_VUS || '100';
 
 let testStages;
@@ -20,7 +29,6 @@ switch(MAX_VUS) {
       { duration: '5s', target: 25 },   // Gentle start
       { duration: '10s', target: 50 },  // Ramp to 50
       { duration: '20s', target: 100 }, // Ramp to 100
-      // { duration: '280s', target: 100 }, // Sustained load
       { duration: '40s', target: 100 }, // Sustained load
       { duration: '5s', target: 0 },    // Ramp down
     ];
@@ -40,7 +48,6 @@ switch(MAX_VUS) {
       { duration: '10s', target: 100 },  // Slower ramp to 100
       { duration: '20s', target: 500 },  // Slower ramp to 500  
       { duration: '20s', target: 1000 }, // Slower ramp to 1000
-      // { duration: '280s', target: 1000 }, // Longer sustained load
       { duration: '40s', target: 1000 }, // Longer sustained load
       { duration: '10s', target: 0 },    // Graceful ramp down
     ];
@@ -55,43 +62,50 @@ export let options = {
   }
 };
 
+// Connection tracking
+const connectedVUs = {};
 
-export default function () {
-  // const url = 'http://47.128.144.242:4000/api/v1/memory/products/all';
-  // const url = 'http://192.168.0.102:4000/api/v1/memory/products/all';
-  // const url = 'http://47.129.237.24:4000/api/v1/memory/products/all';
-  // const url = 'http://10.0.1.185:4000/api/v1/memory/products/all';
-  const url = 'http://54.179.153.42:4000/api/v1/memory/products/all';
-
-  // Start timing
-  const start = new Date().getTime();
-
-  const res = http.get(url);
-
-  // Stop timing
-  const duration = new Date().getTime() - start;
-  responseTime.add(duration);
-
-  // Check if request was successful (status 200 AND body exists)
-  const isStatusOk = res && res.status === 200 && res.body;
-
-  // Always run check to ensure it's counted in metrics
-  check(res, {
-    'status is 200': (r) => r && r.status === 200 && r.body,
-  });
-
-  // Record size of response body (in bytes) - only if response exists
-  if (res && res.body) {
-    responseSize.add(res.body.length);
-  } else {
-    console.log(`Request failed: Status=${res ? res.status : 'timeout'}, Error=${res ? res.error : 'connection timeout'}`);
+export default () => {
+  const vuId = __VU;
+  
+  if (!connectedVUs[vuId]) {
+    client.connect('localhost:6000', { plaintext: true });
+    connectedVUs[vuId] = true;
   }
-
-  // Track metrics - ensure boolean values for Rate metrics
-  successRate.add(!!isStatusOk);
-  failureRate.add(!isStatusOk);
+  
+  // Test operations
+  let start = new Date().getTime();
+  
+  try {
+    // Get all products
+    const getAllResponse = client.invoke('product.ProductService/GetAll', {});
+    
+    let duration = new Date().getTime() - start;
+    responseTime.add(duration);
+    
+    const isStatusOk = check(getAllResponse, {
+      'status is OK': (r) => r && r.status === grpc.StatusOK,
+    });
+    
+    if (!isStatusOk && getAllResponse) {
+      console.log(`gRPC error: Status=${getAllResponse.status}, Message=${getAllResponse.error}`);
+    }
+    
+    // Measure response size
+    if (getAllResponse && getAllResponse.message) {
+      const sizeInBytes = JSON.stringify(getAllResponse.message).length;
+      responseSize.add(sizeInBytes);
+    }
+    
+    // Ensure boolean values for Rate metrics
+    successRate.add(!!isStatusOk);
+    failureRate.add(!isStatusOk);
+  } catch (error) {
+    console.log(`Exception: ${error}`);
+    failureRate.add(1);
+    successRate.add(0);
+  }
+  
   requestsCount.add(1);
-
-  // Sleep to simulate think time
   sleep(1);
-}
+};
